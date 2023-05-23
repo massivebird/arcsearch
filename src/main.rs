@@ -33,11 +33,18 @@ fn main() {
     let query = Regex::new(&format!("(?i){query}")).unwrap();
 
     let systems = [
+        System::new("3DS".truecolor(215,0,0), "3ds", false),
         System::new("DS".truecolor(135,215,255), "ds", false),
         System::new("GB".truecolor(95,135,95), "gb", false),
         System::new("GBA".truecolor(255,175,255), "gba", false),
         System::new("GCN".truecolor(135,95,255), "games", true),
+        System::new("GEN".truecolor(88,88,88), "gen", false),
         System::new("N64".truecolor(0,215,135), "n64", false),
+        System::new("NES".truecolor(215,0,0), "nes", false),
+        System::new("PS1".truecolor(178,178,178), "nes", false),
+        System::new("PS2".truecolor(102,102,102), "nes", false),
+        System::new("PSP".truecolor(95,135,255), "nes", false),
+        System::new("SNES".truecolor(95,0,255), "nes", false),
         System::new("WII".truecolor(0,215,255), "wbfs", true),
     ];
 
@@ -64,7 +71,7 @@ fn main() {
         }
         
         if query.is_match(file_name) {
-            println!("[ {: <3} ] {}", system.pretty_string, file_name);
+            println!("[ {} ] {}", system.pretty_string, file_name);
         }
     }
 
