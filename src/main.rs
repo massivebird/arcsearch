@@ -48,6 +48,8 @@ fn main() {
         System::new("WII".truecolor(0,215,255), "wbfs", true),
     ];
 
+    let mut games_matched: u32 = 0;
+
     // silently skip error entries
     for entry in WalkDir::new(archive_root.clone()).into_iter().filter_map(|e| e.ok()) {
         // "snes/Shadowrun.sfc"
@@ -72,7 +74,10 @@ fn main() {
         
         if query.is_match(file_name) {
             println!("[ {} ] {}", system.pretty_string, file_name);
+            games_matched += 1;
         }
     }
+
+    println!("{games_matched} games found.");
 
 }
