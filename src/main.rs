@@ -1,56 +1,55 @@
 use walkdir::WalkDir;
 use regex::Regex;
 use colored::*;
-use std::fs;
+use std::env;
 
 struct System {
     pretty_string: ColoredString,
     directory: String,
-    games_as: GamesAs,
-}
-
-enum GamesAs {
-    Files,
-    Directories,
+    games_are_directories: bool,
 }
 
 impl System {
-    fn new(pretty_string: ColoredString, dir_name: &str, games_as: GamesAs) -> System {
+    fn new(pretty_string: ColoredString, dir_name: &str, games_are_directories: bool) -> System {
         System {
             directory: String::from(dir_name),
             pretty_string,
-            games_as,
+            games_are_directories,
         }
     }
 }
 
 fn main() {
     let archive_root: String = String::from("/home/penguino/game-archive");
-    let query: &str = "";
-    // let query = Regex::new(r"{}").unwrap();
-    let query = Regex::new(query).unwrap();
+
+    let args: Vec<String> = env::args().collect();
+
+    let query = match args.len() {
+        1 => "", // match all
+        2.. => &args[1],
+        _ => panic!("std::env::args() smoked BAD weed"),
+    };
+    // convert string to case-insensitive regex query
+    let query = Regex::new(&format!("(?i){query}")).unwrap();
 
     let systems = [
-        System::new("GBA".purple(), "gba", GamesAs::Files),
-        System::new("GB".bright_green(), "gb", GamesAs::Files),
-        System::new("DS".bright_blue(), "ds", GamesAs::Files),
-        System::new("N64".green(), "n64", GamesAs::Files),
-        System::new("GCN".bright_magenta(), "games", GamesAs::Directories),
-        System::new("WII".blue(), "wbfs", GamesAs::Directories),
+        System::new("DS".truecolor(135,215,255), "ds", false),
+        System::new("GB".truecolor(95,135,95), "gb", false),
+        System::new("GBA".truecolor(255,175,255), "gba", false),
+        System::new("GCN".truecolor(135,95,255), "games", true),
+        System::new("N64".truecolor(0,215,135), "n64", false),
+        System::new("WII".truecolor(0,215,255), "wbfs", true),
     ];
 
     // silently skip error entries
     for entry in WalkDir::new(archive_root.clone()).into_iter().filter_map(|e| e.ok()) {
+        // "snes/Shadowrun.sfc"
         let relative_pathname = entry.path().strip_prefix(&archive_root).unwrap()
             .to_str().unwrap().to_string();
-        let file_name = entry.path().file_stem().unwrap().to_str().unwrap();
+        // "snes"
         let base_dir = relative_pathname[..relative_pathname.find("/").unwrap_or(0)].to_string();
-
-        for valid_system_dir in systems.iter().map(|s| s.directory.clone()) {
-            if base_dir == valid_system_dir {
-
-            }
-        }
+        // "Shadowrun"
+        let file_name = entry.path().file_stem().unwrap().to_str().unwrap();
 
         // dbg!(relative_pathname);
 
@@ -59,9 +58,13 @@ fn main() {
         else {
             continue;
         };
+
+        if system.games_are_directories && entry.path().is_file() {
+            continue;
+        }
         
         if query.is_match(file_name) {
-            println!("{} {}", system.pretty_string, file_name);
+            println!("[ {: <3} ] {}", system.pretty_string, file_name);
         }
     }
 
