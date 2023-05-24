@@ -34,6 +34,15 @@ impl Config {
 
 }
 
+fn clean_game_name(game_name: String) -> String {
+    let patterns = [
+        r"\(.*\)",
+        r"\[.*\]"
+    ];
+    Regex::new(&patterns.join("|")).unwrap()
+        .replace_all(&game_name, "").trim_end().to_string()
+}
+
 pub fn run(config: Config) {
     let systems = [
         System::new("3DS".truecolor(215,0,0), "3ds", false),
@@ -69,6 +78,7 @@ pub fn run(config: Config) {
             // "Shadowrun"
             let game_name = entry.path().file_stem().unwrap()
                 .to_str().unwrap();
+            let game_name = &clean_game_name(game_name.to_string());
 
             let Some(system) = systems.iter()
                 .filter(|s| s.directory == base_dir).next()
