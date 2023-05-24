@@ -60,7 +60,7 @@ pub fn run(config: Config) {
         System::new("WII".truecolor(0,215,255), "wbfs", true),
     ];
 
-    let mut games_matched: u32 = 0;
+    let mut num_matches: u32 = 0;
 
     // silently skip error entries
     for entry in WalkDir::new(&config.archive_root)
@@ -92,9 +92,13 @@ pub fn run(config: Config) {
 
             if config.query.is_match(game_name) {
                 println!("[ {} ] {}", system.pretty_string, game_name);
-                games_matched += 1;
+                num_matches += 1;
             }
         }
 
-    println!("{games_matched} games found.");
+    println!("{num_matches} {noun} found.",
+        noun = match num_matches {
+            1 => "game",
+            _ => "games",
+        });
 }
