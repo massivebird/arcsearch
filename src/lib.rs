@@ -1,5 +1,6 @@
 use walkdir::WalkDir;
 use regex::Regex;
+use std::env;
 use colored::{Colorize, ColoredString};
 
 struct System {
@@ -27,7 +28,13 @@ impl Config {
     pub fn new(args: &[String]) -> Config {
         let query = args.get(1).unwrap_or(&"".to_string()).to_owned();
         let query = Regex::new(&format!("(?i){query}")).unwrap();
-        let archive_root = args.get(2).unwrap_or(&"/home/penguino/game-archive".to_string()).to_owned();
+        let archive_root = args.get(2)
+            .unwrap_or(&env::var("VG_ARCHIVE")
+                .unwrap_or_else(
+                    |_| panic!("Neither provided path nor VG_ARCHIVE are valid")
+                )
+            )
+            .to_owned();
 
         Config { archive_root, query }
     }
