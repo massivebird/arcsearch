@@ -83,9 +83,9 @@ pub fn run(config: Config) {
                 [..relative_pathname.find("/").unwrap_or(0)]
                 .to_string();
             // "Shadowrun"
-            let game_name = entry.path().file_stem().unwrap()
-                .to_str().unwrap();
-            let game_name = &clean_game_name(game_name.to_string());
+            let game_name = &clean_game_name(entry.path().file_stem()
+                .unwrap().to_str().unwrap().to_string()
+            );
 
             let Some(system) = systems.iter()
                 .filter(|s| s.directory == base_dir).next()
