@@ -47,14 +47,14 @@ pub fn run(config: Config) {
             // "snes/Shadowrun.sfc"
             let relative_pathname = entry.path()
                 .strip_prefix(&config.archive_root).unwrap()
-                .to_str().unwrap().to_string();
+                .to_string_lossy();
             // "snes"
             let base_dir = relative_pathname
                 [..relative_pathname.find("/").unwrap_or(0)]
                 .to_string();
             // "Shadowrun"
             let game_name = &clean_game_name(entry.path().file_stem()
-                .unwrap().to_str().unwrap().to_string()
+                .unwrap().to_string_lossy().into_owned()
             );
 
             let Some(system) = systems.iter()
