@@ -28,7 +28,8 @@ impl Config {
 fn clean_game_name(game_name: String) -> String {
     let patterns = [
         r"\(.*\)",
-        r"\[.*\]"
+        r"\[.*\]",
+        r"\.[^ ]+$",
     ];
     Regex::new(&patterns.join("|")).unwrap()
         .replace_all(&game_name, "").trim_end().to_string()
@@ -56,7 +57,7 @@ pub fn run(config: Config) {
                 [..relative_pathname.find("/").unwrap_or(0)]
                 .to_string();
             // "Shadowrun"
-            let game_name = &clean_game_name(entry.path().file_stem()
+            let game_name = &clean_game_name(entry.path().file_name()
                 .unwrap().to_string_lossy().into_owned()
             );
 
