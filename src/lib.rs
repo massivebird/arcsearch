@@ -1,8 +1,7 @@
 use walkdir::WalkDir;
 use regex::Regex;
 use std::env;
-
-mod systems;
+use archive_systems::generate_systems;
 
 pub struct Config {
     archive_root: String,
@@ -36,7 +35,7 @@ fn clean_game_name(game_name: String) -> String {
 }
 
 pub fn run(config: Config) {
-    let systems = systems::generate_systems();
+    let systems = generate_systems();
 
     let mut num_matches: u32 = 0;
 
@@ -44,7 +43,6 @@ pub fn run(config: Config) {
     for entry in WalkDir::new(&config.archive_root)
         .into_iter().filter_map(|e| e.ok())
         {
-
             // "snes/Shadowrun.sfc"
             let relative_pathname = entry.path()
                 .strip_prefix(&config.archive_root).unwrap()

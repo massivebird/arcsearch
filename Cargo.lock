@@ -12,9 +12,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "archive_systems"
+version = "0.1.0"
+source = "git+https://github.com/massivebird/archive_systems#2dc96e2ac6191741f9995cd6a1c337d9bbf01a79"
+dependencies = [
+ "colored",
+]
+
+[[package]]
 name = "arcsearch"
 version = "0.1.0"
 dependencies = [
+ "archive_systems",
  "colored",
  "regex",
  "walkdir",
@@ -71,9 +80,9 @@ checksum = "2dffe52ecf27772e601905b7522cb4ef790d2cc203488bbd0e2fe85fcb74566d"
 
 [[package]]
 name = "regex"
-version = "1.8.2"
+version = "1.8.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d1a59b5d8e97dee33696bf13c5ba8ab85341c002922fba050069326b9c498974"
+checksum = "81ca098a9821bd52d6b24fd8b10bd081f47d39c22778cafaa75a2857a62c6390"
 dependencies = [
  "aho-corasick",
  "memchr",
@@ -97,12 +106,11 @@ dependencies = [
 
 [[package]]
 name = "walkdir"
-version = "2.3.2"
+version = "2.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "808cf2735cd4b6866113f648b791c6adc5714537bc222d9347bb203386ffda56"
+checksum = "36df944cda56c7d8d8b7496af378e6b16de9284591917d307c9b4d313c44e698"
 dependencies = [
  "same-file",
- "winapi",
  "winapi-util",
 ]
 
