@@ -58,7 +58,7 @@ pub fn run(config: Config) {
 
             // "snes"
             let base_dir = relative_pathname
-                [..relative_pathname.find("/").unwrap_or(0)]
+                [..relative_pathname.find('/').unwrap_or(0)]
                 .to_string();
 
             // "Shadowrun"
@@ -67,7 +67,7 @@ pub fn run(config: Config) {
             );
 
             let Some(system) = systems.iter()
-                .filter(|s| s.directory == base_dir).next()
+                .find(|s| s.directory == base_dir)
             else {
                 continue;
             };
