@@ -1,4 +1,4 @@
-use walkdir::WalkDir;
+use walkdir::{WalkDir, DirEntry};
 use regex::Regex;
 use std::env;
 use archive_systems::generate_systems;
@@ -37,25 +37,30 @@ fn clean_game_name(game_name: String) -> String {
 pub fn run(config: Config) {
     let systems = generate_systems();
 
+    let is_valid_system_dir = |e: &DirEntry| {
+        systems.iter().any(|s| e.path().to_string_lossy().contains(&s.directory))
+    };
+
+    let is_not_bios_dir = |e: &DirEntry| {
+        !e.path().to_string_lossy().contains("!bios")
+    };
+
     let mut num_matches: u32 = 0;
 
-    // silently skip error entries
-    for entry in WalkDir::new(&config.archive_root)
-        .into_iter().filter_map(|e| e.ok())
-        .filter(|e| systems.iter()
-            .any(|s| e.path().to_string_lossy().contains(&s.directory)))
+    for entry in WalkDir::new(&config.archive_root).into_iter()
+        .filter_map(|e| e.ok()) // silently skip errorful entries
+        .filter(|e| is_not_bios_dir(e) && is_valid_system_dir(e))
         {
             // "snes/Shadowrun.sfc"
             let relative_pathname = entry.path()
                 .strip_prefix(&config.archive_root).unwrap()
                 .to_string_lossy();
 
-            if relative_pathname.contains("!bios") { continue }
-
             // "snes"
             let base_dir = relative_pathname
                 [..relative_pathname.find("/").unwrap_or(0)]
                 .to_string();
+
             // "Shadowrun"
             let game_name = &clean_game_name(entry.path().file_name()
                 .unwrap().to_string_lossy().into_owned()
