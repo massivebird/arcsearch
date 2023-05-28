@@ -42,6 +42,8 @@ pub fn run(config: Config) {
     // silently skip error entries
     for entry in WalkDir::new(&config.archive_root)
         .into_iter().filter_map(|e| e.ok())
+        .filter(|e| systems.iter()
+            .any(|s| e.path().to_string_lossy().contains(&s.directory)))
         {
             // "snes/Shadowrun.sfc"
             let relative_pathname = entry.path()
