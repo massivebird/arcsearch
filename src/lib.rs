@@ -31,18 +31,25 @@ fn clean_game_name(game_name: String) -> String {
         r"\.[^ ]+$",
     ];
     Regex::new(&patterns.join("|")).unwrap()
-        .replace_all(&game_name, "").trim_end().to_string()
+        .replace_all(&game_name, "")
+        .trim_end()
+        .to_string()
 }
 
 pub fn run(config: Config) {
     let systems = generate_systems();
 
-    let is_valid_system_dir = |e: &DirEntry| {
-        systems.iter().any(|s| e.path().to_string_lossy().contains(&s.directory))
+    let is_valid_system_dir = |entry: &DirEntry| {
+        systems.iter().any(
+            |system| entry.path()
+                .to_string_lossy()
+                .contains(&system.directory))
     };
 
-    let is_not_bios_dir = |e: &DirEntry| {
-        !e.path().to_string_lossy().contains("!bios")
+    let is_not_bios_dir = |entry: &DirEntry| {
+        !entry.path()
+            .to_string_lossy()
+            .contains("!bios")
     };
 
     let mut num_matches: u32 = 0;
@@ -62,12 +69,15 @@ pub fn run(config: Config) {
                 .to_string();
 
             // "Shadowrun"
-            let game_name = &clean_game_name(entry.path().file_name()
-                .unwrap().to_string_lossy().into_owned()
+            let game_name = &clean_game_name(entry.path()
+                .file_name()
+                .unwrap()
+                .to_string_lossy()
+                .into_owned()
             );
 
             let Some(system) = systems.iter()
-                .find(|s| s.directory == base_dir)
+                .find(|system| system.directory == base_dir)
             else {
                 continue;
             };
