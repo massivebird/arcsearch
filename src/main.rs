@@ -1,9 +1,11 @@
-use std::env;
+use std::{env, io};
 use arcsearch::Config;
 
-fn main() {
+fn main() -> io::Result<()> {
     let args: Vec<String> = env::args().collect();
     let config = Config::new(&args);
 
-    arcsearch::run(config);
+    arcsearch::run(&config)?;
+
+    Ok(())
 }
