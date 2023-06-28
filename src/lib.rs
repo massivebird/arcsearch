@@ -12,8 +12,8 @@ pub struct Config {
 impl Config {
     pub fn new(args: &[String]) -> Self {
         let query = args.get(1).unwrap_or(&String::new()).clone();
-        let query =
-        Regex::new(&format!("(?i){query}")).expect("invalid regular expression argument");
+        let query = Regex::new(&format!("(?i){query}"))
+            .expect("invalid regular expression argument");
         let archive_root = args
             .get(2)
             .unwrap_or(&env::var("VG_ARCHIVE").unwrap_or_else(|_| {
