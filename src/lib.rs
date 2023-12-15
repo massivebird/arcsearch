@@ -1,4 +1,4 @@
-use archive_systems::generate_systems;
+use arcconfig::read_config;
 use regex::Regex;
 use std::result::Result;
 use std::{env, io, process};
@@ -39,7 +39,7 @@ fn clean_game_name(game_name: &str) -> String {
 }
 
 pub fn run(config: &Config) -> Result<(), io::Error> {
-    let systems = generate_systems();
+    let systems = read_config(&config.archive_root);
 
     let is_valid_system_dir = |entry: &DirEntry| {
         systems
