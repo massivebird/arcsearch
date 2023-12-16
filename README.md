@@ -17,6 +17,31 @@ Arcsearch allows you to query your game collection with ease! Some features incl
 + Displays game titles without their [codes](https://www.emuparadise.me/help/romnames.php) such as `(USA, Europe)`, `[!]`, and `(Disk 2)`
 + Displays game systems with distinct, customizable names
 
+### What is a valid video game archive?
+
+A valid archive file system structure should follow these general rules:
+
++ Contains a `config.yaml` in the archive root (see: [Customization](#customization))
++ Immediate root subdirectories represent individual game systems
++ Files in system directories represent individual games
+  + These files can either be normal files or directories
+
+Here is an example of a valid archive structure:
+
+```bash
+/game/archive/root
+├── ds
+│   ├── game-1.nds
+│   ├── game-2.nds
+│   └── game-3.nds
+├── wii
+│   ├── game-1-dir
+│   │   └── game-1.wbfs
+│   └── game-2-dir
+│       └── game-2.wbfs
+└── config.yaml
+```
+
 ## Building
 
 To manually build the project, you must first [install Rust](https://www.rust-lang.org/tools/install).
@@ -68,7 +93,7 @@ You can temporarily define this variable during testing like so:
 VG_ARCHIVE="path/to/archive/root" cargo run [query-regex]
 ```
 
-### Customization
+<h3 id="customization">Customization</h3>
 
 Arcsearch looks for a `config.yaml` file in the root of your archive. This configuration file tells arcsearch where and how to look for games!
 
