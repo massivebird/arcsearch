@@ -14,7 +14,7 @@ dependencies = [
 [[package]]
 name = "arcconfig"
 version = "0.1.0"
-source = "git+https://github.com/massivebird/arcconfig#2ac007545a37423f17e0fe5a0e48376d9d9e0d46"
+source = "git+https://github.com/massivebird/arcconfig?branch=main#24dd9aa148050d3cd1b1282c4c8f1f6b96c9d4e5"
 dependencies = [
  "colored",
  "yaml-rust",
