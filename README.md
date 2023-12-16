@@ -11,28 +11,61 @@ My command line querying utility for video game archives!
 
 ## What does arcsearch do?
 
-I wanted to search for games without dealing with the slowness and unhelpful presentation of normal file system query methods.
+Arcsearch allows you to query your game collection with ease! Some features include:
 
-Some features include:
++ Regular expression support
++ Displays game titles without their [codes](https://www.emuparadise.me/help/romnames.php) such as `(USA, Europe)`, `[!]`, and `(Disk 2)`
++ Displays game systems with distinct, customizable names
 
-+ Displaying game titles without their [codes](https://www.emuparadise.me/help/romnames.php) such as `(USA, Europe)`, `[!]`, and `(Disk 2)`
-+ Displaying systems with visually distinct colors
-+ Querying with regular expressions
+## Building
 
-## Getting started
+To manually build the project, you must first [install Rust](https://www.rust-lang.org/tools/install).
+
+Once you have Rust installed, run the following commands:
 
 ```bash
 git clone https://github.com/massivebird/arcsearch
 cd arcsearch
-cargo run
+cargo run # runs unoptimized build
+```
+
+### Adding arcsearch to your PATH
+
+If you want to add arcsearch to your PATH, I recommend building it in release mode for better optimization.
+
+```bash
+cd arcsearch
+# build release mode
+cargo build --release
+# add arcsearch to your PATH
+ln -s ./target/release/arcsearch <dir-in-PATH>
+# run arcsearch
+arcsearch
 ```
 
 ## Usage
 
-Arcsearch finds the root of your archive using the environment variable `VG_ARCHIVE`. You can set this during testing like so:
+Basic arcsearch syntax is as follows:
 
 ```bash
-VG_ARCHIVE="path/to/archive/root" cargo run
+# if running with cargo
+cargo run [query-regex]
+
+# if added to your path
+arcsearch [query-regex]
+```
+
+Omitting the query argument displays all games in your collection.
+
+
+### Locating your archive
+
+Arcsearch finds the root of your archive using the environment variable `VG_ARCHIVE`.
+
+You can temporarily define this variable during testing like so:
+
+```bash
+VG_ARCHIVE="path/to/archive/root" cargo run [query-regex]
 ```
 
 ### Customization
