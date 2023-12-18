@@ -63,7 +63,7 @@ cd arcsearch
 # build release mode
 cargo build --release
 # add arcsearch to your PATH
-ln -s ./target/release/arcsearch <dir-in-PATH>
+ln -rs ./target/release/arcsearch <dir-in-PATH>/arcsearch
 # run arcsearch
 arcsearch
 ```
@@ -73,24 +73,20 @@ arcsearch
 Basic arcsearch syntax is as follows:
 
 ```bash
-# if running with cargo
-cargo run [query-regex]
-
-# if added to your path
-arcsearch [query-regex]
+arcsearch [query]
 ```
 
-Omitting the query argument displays all games in your collection.
+For more information, run `arcsearch --help`.
 
 
 ### Locating your archive
 
-Arcsearch finds the root of your archive using the environment variable `VG_ARCHIVE`.
+To find your archive, arcsearch defaults to reading the environment variable `VG_ARCHIVE`.
 
-You can temporarily define this variable during testing like so:
+You can also provide this path from the command line:
 
 ```bash
-VG_ARCHIVE="path/to/archive/root" cargo run [query-regex]
+arcsearch --archive-path /path/to/archive "some query"
 ```
 
 <h3 id="customization">Customization</h3>
