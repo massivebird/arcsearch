@@ -7,11 +7,17 @@ use walkdir::{DirEntry, WalkDir};
 pub struct Config {
     archive_root: String,
     query: Regex,
+    desired_systems: Option<Vec<String>>,
 }
 
 impl Config {
     pub fn new() -> Self {
         let matches = clap::command!()
+            .arg(Arg::new("desired_systems")
+                .long("systems")
+                .help("Comma-separated system labels to query exclusively")
+                .value_name("labels")
+            )
             .arg(Arg::new("archive_root")
                 .long("archive-root")
                 .alias("archive-path")
@@ -37,9 +43,17 @@ impl Config {
             Regex::new(&format!("(?i){raw_query}")).expect("Invalid regex query")
         };
 
+        let desired_systems: Option<Vec<String>> = match matches.get_one::<String>("desired_systems") {
+            Some(labels) => Some(labels.split(',').map(|s| s.to_string()).collect()),
+            None => None,
+        };
+
+        dbg!(&desired_systems);
+
         Self {
             archive_root,
             query,
+            desired_systems,
         }
     }
 }
