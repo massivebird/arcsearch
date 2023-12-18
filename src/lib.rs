@@ -1,7 +1,7 @@
 use arcconfig::read_config;
+use clap::Arg;
 use regex::Regex;
-use std::result::Result;
-use std::{env, io, process};
+use std::{result::Result, env, io};
 use walkdir::{DirEntry, WalkDir};
 
 pub struct Config {
@@ -11,16 +11,20 @@ pub struct Config {
 
 impl Config {
     pub fn new(args: &[String]) -> Self {
+        let matches = clap::command!()
+            .arg(Arg::new("archive_root").long("archive-root"))
+            .get_matches();
+
+        let archive_root: String = matches.get_one::<String>("archive_root").map_or_else(
+            || env::var("VG_ARCHIVE").unwrap_or_else(
+                |_| panic!("Please supply an archive path via argument or VG_ARCHIVE environment variable.")
+            ),
+            String::to_string
+        );
+
         let query = args.get(1).unwrap_or(&String::new()).clone();
         let query = Regex::new(&format!("(?i){query}"))
             .expect("invalid regular expression argument");
-        let archive_root = args
-            .get(2)
-            .unwrap_or(&env::var("VG_ARCHIVE").unwrap_or_else(|_| {
-                eprintln!("Neither provided path nor VG_ARCHIVE are valid");
-                process::exit(1);
-            }))
-            .clone();
 
         Self {
             archive_root,
