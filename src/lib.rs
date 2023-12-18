@@ -29,51 +29,55 @@ pub fn run(config: &Config) -> Result<(), io::Error> {
 
     let mut num_matches: u32 = 0;
 
-    for entry in WalkDir::new(&config.archive_root)
-        .into_iter()
-        // silently skip errorful entries
-        .filter_map(Result::ok)
-        .filter(|e| is_not_bios_dir(e) && is_valid_system_dir(e))
-        {
-            // "snes/Shadowrun.sfc"
-            let relative_pathname = entry
-                .path()
-                .strip_prefix(&config.archive_root)
-                .expect("path does not contain archive root")
-                .to_string_lossy();
+    // saves a lot of indentation in the `for` loop
+    let walk_through_archive = || {
+        WalkDir::new(&config.archive_root)
+            .into_iter()
+            // silently skip errorful entries
+            .filter_map(Result::ok)
+            .filter(|e| is_not_bios_dir(e) && is_valid_system_dir(e))
+    };
 
-            // "snes"
-            let base_dir = relative_pathname[..relative_pathname.find('/').unwrap_or(0)].to_string();
+    for entry in walk_through_archive() {
+        // "snes/Shadowrun.sfc"
+        let relative_pathname = entry
+            .path()
+            .strip_prefix(&config.archive_root)
+            .expect("path does not contain archive root")
+            .to_string_lossy();
 
-            let Some(system) = systems.iter()
-                .find(|system| system.directory == base_dir)
-            else {
-                continue;
-            };
+        // "snes"
+        let base_dir = relative_pathname[..relative_pathname.find('/').unwrap_or(0)].to_string();
 
-            if config.desired_systems.is_some()
-            && !config.desired_systems.as_ref().unwrap().contains(&system.label) {
-                continue;
-            }
+        let Some(system) = systems.iter().find(
+            |system| system.directory == base_dir
+        ) else {
+            continue;
+        };
 
-            if system.games_are_directories && entry.path().is_file() {
-                continue;
-            }
-
-            // "Shadowrun"
-            let game_name = &clean_game_name(
-                &entry
-                    .path()
-                    .file_name()
-                    .expect("unable to extract file name from path")
-                    .to_string_lossy(),
-            );
-
-            if config.query.is_match(game_name) {
-                println!("[ {} ] {}", system.pretty_string, game_name);
-                num_matches += 1;
-            }
+        if config.desired_systems.is_some()
+        && !config.desired_systems.as_ref().unwrap().contains(&system.label) {
+            continue;
         }
+
+        if system.games_are_directories && entry.path().is_file() {
+            continue;
+        }
+
+        // "Shadowrun"
+        let game_name = &clean_game_name(
+            &entry
+                .path()
+                .file_name()
+                .expect("unable to extract file name from path")
+                .to_string_lossy(),
+        );
+
+        if config.query.is_match(game_name) {
+            println!("[ {} ] {}", system.pretty_string, game_name);
+            num_matches += 1;
+        }
+    }
 
     println!(
         "{num_matches} {noun} found.",
