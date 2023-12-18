@@ -1,5 +1,5 @@
 use arcconfig::read_config;
-use clap::Arg;
+use clap::{Arg, ValueHint};
 use regex::Regex;
 use std::{result::Result, env, io};
 use walkdir::{DirEntry, WalkDir};
@@ -16,6 +16,8 @@ impl Config {
                 .long("archive-root")
                 .alias("archive-path")
                 .help("The root of your game archive")
+                .value_name("PATH")
+                .value_hint(ValueHint::DirPath)
             )
             .arg(Arg::new("query")
                 .default_value(".*")
