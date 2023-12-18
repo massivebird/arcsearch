@@ -45,8 +45,6 @@ impl Config {
             |labels| labels.split(',').map(ToString::to_string).collect()
         );
 
-        dbg!(&desired_systems);
-
         Self {
             archive_root,
             query,
