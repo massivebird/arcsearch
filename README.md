@@ -73,7 +73,7 @@ arcsearch
 Basic arcsearch syntax is as follows:
 
 ```bash
-arcsearch [query]
+arcsearch <query>
 ```
 
 For more information, run `arcsearch --help`.
