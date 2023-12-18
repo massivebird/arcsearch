@@ -10,9 +10,17 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new(args: &[String]) -> Self {
+    pub fn new() -> Self {
         let matches = clap::command!()
-            .arg(Arg::new("archive_root").long("archive-root"))
+            .arg(Arg::new("archive_root")
+                .long("archive-root")
+                .alias("archive-path")
+                .help("The root of your game archive")
+            )
+            .arg(Arg::new("query")
+                .default_value(".*")
+                .help("Regex search query")
+            )
             .get_matches();
 
         let archive_root: String = matches.get_one::<String>("archive_root").map_or_else(
@@ -22,9 +30,10 @@ impl Config {
             String::to_string
         );
 
-        let query = args.get(1).unwrap_or(&String::new()).clone();
-        let query = Regex::new(&format!("(?i){query}"))
-            .expect("invalid regular expression argument");
+        let query: Regex = {
+            let raw_query = matches.get_one::<String>("query").unwrap();
+            Regex::new(&format!("(?i){raw_query}")).expect("Invalid regex query")
+        };
 
         Self {
             archive_root,
