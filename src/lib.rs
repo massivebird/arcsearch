@@ -20,7 +20,7 @@ impl Config {
                 .value_hint(ValueHint::DirPath)
             )
             .arg(Arg::new("query")
-                .default_value(".*")
+                .required(true)
                 .help("Regex search query")
             )
             .get_matches();
