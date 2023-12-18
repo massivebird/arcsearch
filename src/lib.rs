@@ -1,6 +1,7 @@
 use arcconfig::read_config;
 use clap::{Arg, ValueHint};
 use regex::Regex;
+use std::string::ToString;
 use std::{result::Result, env, io};
 use walkdir::{DirEntry, WalkDir};
 
@@ -43,10 +44,9 @@ impl Config {
             Regex::new(&format!("(?i){raw_query}")).expect("Invalid regex query")
         };
 
-        let desired_systems: Option<Vec<String>> = match matches.get_one::<String>("desired_systems") {
-            Some(labels) => Some(labels.split(',').map(|s| s.to_string()).collect()),
-            None => None,
-        };
+        let desired_systems: Option<Vec<String>> = matches.get_one::<String>("desired_systems").map(
+            |labels| labels.split(',').map(ToString::to_string).collect()
+        );
 
         dbg!(&desired_systems);
 
@@ -101,6 +101,11 @@ pub fn run(config: &Config) -> Result<(), io::Error> {
             else {
                 continue;
             };
+
+            if config.desired_systems.is_some()
+            && !config.desired_systems.as_ref().unwrap().contains(&system.label) {
+                continue;
+            }
 
             if system.games_are_directories && entry.path().is_file() {
                 continue;
