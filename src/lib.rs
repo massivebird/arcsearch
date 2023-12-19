@@ -35,13 +35,14 @@ pub fn run(config: &Config) -> Result<(), io::Error> {
 
     let mut num_matches: u32 = 0;
 
-    let walk_through_archive = systems.iter()
-        .flat_map(|s| WalkDir::new(&s.directory)
-            .into_iter()
-            .filter_map(Result::ok) // silently skip errorful entries
-            .filter(|e| is_not_bios_dir(e) && is_valid_system_dir(e))
-        )
-    ;
+    let walk_through_archive: Vec<DirEntry> = systems.iter()
+        .flat_map(|sys| {
+            WalkDir::new(config.archive_root.clone() + "/" + &sys.directory)
+                .into_iter()
+                .filter_map(Result::ok) // silently skip errorful entries
+                .filter(|e| is_not_bios_dir(e) && is_valid_system_dir(e))
+        })
+        .collect();
 
     for entry in walk_through_archive {
         // "snes/Shadowrun.sfc"
