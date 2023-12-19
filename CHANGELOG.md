@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.2] - 2023-12-19
+
+### Changed
+
++ Optimized filtering of systems through `--systems` argument
+
 ## [0.2.1] - 2023-12-18
 
 ### Added
