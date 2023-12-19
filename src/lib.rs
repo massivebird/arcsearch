@@ -35,12 +35,13 @@ pub fn run(config: &Config) -> Result<(), io::Error> {
 
     let mut num_matches: u32 = 0;
 
-    // saves a lot of indentation in the `for` loop
-    let walk_through_archive = WalkDir::new(&config.archive_root)
+    let walk_through_archive = systems.iter()
+        .flat_map(|s| WalkDir::new(&s.directory)
             .into_iter()
-            // silently skip errorful entries
-            .filter_map(Result::ok)
-            .filter(|e| is_not_bios_dir(e) && is_valid_system_dir(e));
+            .filter_map(Result::ok) // silently skip errorful entries
+            .filter(|e| is_not_bios_dir(e) && is_valid_system_dir(e))
+        )
+    ;
 
     for entry in walk_through_archive {
         // "snes/Shadowrun.sfc"
