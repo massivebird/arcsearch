@@ -98,6 +98,7 @@ Arcsearch looks for a `config.yaml` file in the root of your archive. This confi
 Here is an example configuration:
 
 ```yaml
+# config.yaml
 systems:
   ds: # system "label" — call it whatever you want!
     display_name: "DS"
