@@ -1,4 +1,4 @@
-use arcconfig::read_config;
+use arcconfig::{read_config, System};
 use regex::Regex;
 use self::config::Config;
 use std::string::ToString;
@@ -17,7 +17,13 @@ fn clean_game_name(game_name: &str) -> String {
 }
 
 pub fn run(config: &Config) -> Result<(), io::Error> {
-    let systems = read_config(&config.archive_root);
+    let systems: Vec<System> = read_config(&config.archive_root)
+        .into_iter()
+        .filter(|s| config.desired_systems.clone().map_or(
+            true,
+            |labels| labels.contains(&s.label)
+        ))
+        .collect();
 
     let is_valid_system_dir = |entry: &DirEntry| {
         systems
@@ -54,11 +60,6 @@ pub fn run(config: &Config) -> Result<(), io::Error> {
         ) else {
             continue;
         };
-
-        if config.desired_systems.is_some()
-        && !config.desired_systems.as_ref().unwrap().contains(&system.label) {
-            continue;
-        }
 
         if system.games_are_directories && entry.path().is_file() {
             continue;
