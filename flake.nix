@@ -18,8 +18,8 @@
         pkgs = import nixpkgs { inherit system; };
         naersk-lib = pkgs.callPackage naersk { };
       in {
-        defaultPackage = naersk-lib.buildPackage ./.;
-        devShell = with pkgs;
+        packages.default = naersk-lib.buildPackage ./.;
+        shells.default = with pkgs;
           mkShell {
             buildInputs =
               [ cargo rustc rustfmt pre-commit rustPackages.clippy ];
