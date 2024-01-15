@@ -116,3 +116,12 @@ systems:
     path: "wbfs"
     games_are_directories: true
 ```
+
+## Other arcosystem projects
+
+Arcsearch belongs to a family of projects called the arcosystem!
+
+Check out some other arcosystem projects:
+
++ [arcstat](https://github.com/massivebird/arcstat): game archive stats
++ [arcconfig](https://github.com/massivebird/arcconfig): backbone of the arcosystem
