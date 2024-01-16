@@ -32,6 +32,9 @@ pub fn run(config: &Config) -> Result<(), io::Error> {
     // saves a lot of indentation in the `for` loop
     let walk_through_archive = || {
         WalkDir::new(&config.archive_root)
+            // 1) iterates through regular files before subdirectories, and
+            // 2) iterates through both types lexicographically
+            .sort_by(|a, b| a.file_name().cmp(b.file_name()))
             .into_iter()
             // silently skip errorful entries
             .filter_map(Result::ok)
@@ -47,7 +50,7 @@ pub fn run(config: &Config) -> Result<(), io::Error> {
             .to_string_lossy();
 
         // "snes"
-        let base_dir = relative_pathname[..relative_pathname.find('/').unwrap_or(0)].to_string();
+        let base_dir = relative_pathname[..relative_pathname.rfind('/').unwrap_or(0)].to_string();
 
         let Some(system) = systems.iter().find(
             |system| system.directory == base_dir
@@ -60,7 +63,9 @@ pub fn run(config: &Config) -> Result<(), io::Error> {
             continue;
         }
 
-        if system.games_are_directories && entry.path().is_file() {
+        if system.games_are_directories && entry.path().is_file() ||
+        !system.games_are_directories && entry.path().is_dir()
+        {
             continue;
         }
 
