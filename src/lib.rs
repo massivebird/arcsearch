@@ -1,4 +1,4 @@
-use arcconfig::read_config;
+use arcconfig::{read_config, System};
 use regex::Regex;
 use self::config::Config;
 use std::string::ToString;
@@ -16,51 +16,36 @@ fn clean_game_name(game_name: &str) -> String {
         .to_string()
 }
 
-pub fn run(config: &Config) -> Result<(), io::Error> {
-    let systems = read_config(&config.archive_root);
-
-    let is_valid_system_dir = |entry: &DirEntry| {
-        systems
-            .iter()
-            .any(|system| entry.path().to_string_lossy().contains(&system.directory))
-    };
+fn query_system(
+    config: &Config,
+    system: System,
+) -> u32 {
+    let mut num_matches: u32 = 0;
 
     let is_not_bios_dir = |entry: &DirEntry| !entry.path().to_string_lossy().contains("!bios");
 
-    let mut num_matches: u32 = 0;
-
     // saves a lot of indentation in the `for` loop
     let walk_through_archive = || {
-        WalkDir::new(&config.archive_root)
+        WalkDir::new(config.archive_root.clone() + "/" + system.directory.as_str())
+            .max_depth(1)
             .into_iter()
             // silently skip errorful entries
             .filter_map(Result::ok)
-            .filter(|e| is_not_bios_dir(e) && is_valid_system_dir(e))
+            .filter(is_not_bios_dir)
+            // skip directory itself
+            .skip(1)
     };
 
     for entry in walk_through_archive() {
-        // "snes/Shadowrun.sfc"
-        let relative_pathname = entry
-            .path()
-            .strip_prefix(&config.archive_root)
-            .expect("path does not contain archive root")
-            .to_string_lossy();
-
-        // "snes"
-        let base_dir = relative_pathname[..relative_pathname.find('/').unwrap_or(0)].to_string();
-
-        let Some(system) = systems.iter().find(
-            |system| system.directory == base_dir
-        ) else {
-            continue;
-        };
-
+        // dbg!(&entry);
         if config.desired_systems.is_some()
         && !config.desired_systems.as_ref().unwrap().contains(&system.label) {
             continue;
         }
 
-        if system.games_are_directories && entry.path().is_file() {
+        if system.games_are_directories && entry.path().is_file() ||
+        !system.games_are_directories && entry.path().is_dir()
+        {
             continue;
         }
 
@@ -77,6 +62,18 @@ pub fn run(config: &Config) -> Result<(), io::Error> {
             println!("[ {} ] {}", system.pretty_string, game_name);
             num_matches += 1;
         }
+    }
+
+    num_matches
+}
+
+pub fn run(config: &Config) -> Result<(), io::Error> {
+    let systems = read_config(&config.archive_root);
+
+    let mut num_matches: u32 = 0;
+
+    for system in systems {
+        num_matches += query_system(config, system);
     }
 
     println!(
