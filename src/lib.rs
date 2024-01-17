@@ -1,7 +1,6 @@
 use arcconfig::{read_config, System};
 use regex::Regex;
 use self::config::Config;
-use std::string::ToString;
 use std::{result::Result, io};
 use walkdir::{DirEntry, WalkDir};
 
