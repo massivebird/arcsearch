@@ -11,7 +11,7 @@ I'm new at this, so expect imperfection ;_; I'm trying!
 
 ### Changed
 
-+ Changed file navigation strategy for improved performance(#16)
++ Changed file navigation strategy for improved performance (#16)
 
 ## [0.2.3] - 2023-01-17
 
