@@ -1,6 +1,7 @@
-use clap::{Arg, ValueHint};
 use regex::Regex;
 use std::env;
+
+mod cli;
 
 pub struct Config {
     pub archive_root: String,
@@ -10,24 +11,7 @@ pub struct Config {
 
 impl Config {
     pub fn new() -> Self {
-        let matches = clap::command!()
-            .arg(Arg::new("desired_systems")
-                .long("systems")
-                .help("Comma-separated system labels to query exclusively")
-                .value_name("labels")
-            )
-            .arg(Arg::new("archive_root")
-                .long("archive-root")
-                .alias("archive-path")
-                .help("The root of your game archive")
-                .value_name("PATH")
-                .value_hint(ValueHint::DirPath)
-            )
-            .arg(Arg::new("query")
-                .required(true)
-                .help("Regex search query")
-            )
-            .get_matches();
+        let matches = cli::build_args().get_matches();
 
         let archive_root: String = matches.get_one::<String>("archive_root").map_or_else(
             || env::var("VG_ARCHIVE").unwrap_or_else(

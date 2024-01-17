@@ -17,7 +17,6 @@ fn query_system(
         std::path::Path::new(system_path)
             .read_dir()
             .unwrap()
-            .into_iter()
             .filter_map(Result::ok)
             .filter(is_not_bios_dir)
     };
