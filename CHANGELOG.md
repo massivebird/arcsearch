@@ -12,6 +12,7 @@ I'm new at this, so expect imperfection ;_; I'm trying!
 ### Added
 
 + Added support for system paths containing `/` characters (#11)
++ Added basic GitHub Actions for automated testing
 
 ### Documentation
 
