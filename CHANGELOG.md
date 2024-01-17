@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 I'm new at this, so expect imperfection ;_; I'm trying!
 
+## Unreleased
+
+### Changed
+
++ Updated arcconfig => 0.2.1
+
 ## [0.2.2] - 2023-01-16
 
 ### Added
