@@ -1,8 +1,7 @@
 use arcconfig::{read_config, System};
 use regex::Regex;
 use self::config::Config;
-use std::{result::Result, io};
-use walkdir::{DirEntry, WalkDir};
+use std::{fs::DirEntry, result::Result, io};
 
 pub mod config;
 
@@ -11,19 +10,19 @@ fn query_system(
     system: &System,
     num_matches: &mut u32,
 ) {
+    let system_path = &(config.archive_root.clone() + "/" + system.directory.as_str());
+
     // saves a lot of indentation in the `for` loop
-    let walk_through_archive = || {
-        WalkDir::new(config.archive_root.clone() + "/" + system.directory.as_str())
-            .max_depth(1)
+    let archive_iterator = || {
+        std::path::Path::new(system_path)
+            .read_dir()
+            .unwrap()
             .into_iter()
-            // silently skip errorful entries
             .filter_map(Result::ok)
             .filter(is_not_bios_dir)
-            // skip directory itself
-            .skip(1)
     };
 
-    for entry in walk_through_archive() {
+    for entry in archive_iterator() {
         if system.games_are_directories && entry.path().is_file() ||
         !system.games_are_directories && entry.path().is_dir()
         {
