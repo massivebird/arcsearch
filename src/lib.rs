@@ -6,19 +6,6 @@ use walkdir::{DirEntry, WalkDir};
 
 pub mod config;
 
-fn clean_game_name(game_name: &str) -> String {
-    let patterns = [r"\(.*\)", r"\[.*\]", r"\.[^ ]+$"];
-    Regex::new(&patterns.join("|"))
-        .expect("invalid replace expression")
-        .replace_all(game_name, "")
-        .trim_end()
-        .to_string()
-}
-
-fn is_not_bios_dir(entry: &DirEntry) -> bool {
-    !entry.path().to_string_lossy().contains("!bios")
-}
-
 fn query_system(
     config: &Config,
     system: &System,
@@ -85,3 +72,17 @@ pub fn run(config: &Config) -> Result<(), io::Error> {
 
     Ok(())
 }
+
+fn clean_game_name(game_name: &str) -> String {
+    let patterns = [r"\(.*\)", r"\[.*\]", r"\.[^ ]+$"];
+    Regex::new(&patterns.join("|"))
+        .expect("invalid replace expression")
+        .replace_all(game_name, "")
+        .trim_end()
+        .to_string()
+}
+
+fn is_not_bios_dir(entry: &DirEntry) -> bool {
+    !entry.path().to_string_lossy().contains("!bios")
+}
+
