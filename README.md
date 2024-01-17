@@ -42,6 +42,9 @@ Here is an example of a valid archive structure:
 └── config.yaml
 ```
 
+> [!tip]
+> While it is possible to place system directories multiple levels below the archive root (such as in `root/systems/consoles/ps2`), __I do not recommend nesting system directories.__ This may generate undesirable results.
+
 ## Building
 
 To manually build the project, you must first [install Rust](https://www.rust-lang.org/tools/install).
