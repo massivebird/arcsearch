@@ -9,6 +9,10 @@ I'm new at this, so expect imperfection ;_; I'm trying!
 
 ## Unreleased
 
+### Added
+
++ Added `--all` flag that displays all games
+
 ### Changed
 
 + Changed file navigation strategy for improved performance (#16)
