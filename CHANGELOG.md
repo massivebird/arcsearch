@@ -11,7 +11,7 @@ I'm new at this, so expect imperfection ;_; I'm trying!
 
 ### Added
 
-+ Added `--all` flag that displays all games
++ Added `--all` flag that displays all games (#17)
 + Added long help messages invoked with `--help`
 + Added some short argument invocations
   + `-r` for `--archive-root`
