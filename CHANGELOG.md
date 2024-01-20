@@ -13,7 +13,7 @@ I'm new at this, so expect imperfection ;_; I'm trying!
 
 + Added `--all` flag that displays all games (#17)
 + Added long help messages invoked with `--help`
-+ Added some short argument invocations
++ Added some short option invocations
   + `-r` for `--archive-root`
   + `-s` for `--systems`
 
