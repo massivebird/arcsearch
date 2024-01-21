@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 I'm new at this, so expect imperfection ;_; I'm trying!
 
-## [0.2.4] - 2023-01-19
+## Unreleased
+
+### Fixed
+
++ Fixed incorrect dates in changelog
+
+## [0.2.4] - 2024-01-19
 
 ### Added
 
@@ -21,13 +27,13 @@ I'm new at this, so expect imperfection ;_; I'm trying!
 
 + Changed file navigation strategy for improved performance (#16)
 
-## [0.2.3] - 2023-01-17
+## [0.2.3] - 2024-01-17
 
 ### Changed
 
 + Updated arcconfig => 0.2.1
 
-## [0.2.2] - 2023-01-16
+## [0.2.2] - 2024-01-16
 
 ### Added
 
