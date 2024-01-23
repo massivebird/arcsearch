@@ -1,4 +1,4 @@
-use arcconfig::{read_config, System};
+use arcconfig::{read_config, system::System};
 use regex::Regex;
 use self::config::Config;
 use std::{fs::DirEntry, result::Result, io};
