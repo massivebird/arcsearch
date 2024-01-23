@@ -9,6 +9,10 @@ I'm new at this, so expect imperfection ;_; I'm trying!
 
 ## Unreleased
 
+### Changes
+
++ Updates arcconfig dependency => 0.3.x
+
 ### Fixed
 
 + Fixed incorrect dates in changelog
