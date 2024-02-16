@@ -10,11 +10,15 @@ fn query_system(
     system: &System,
     num_matches: &mut u32,
 ) {
-    let system_path = &(config.archive_root.clone() + "/" + system.directory.as_str());
+    let system_path = format!(
+        "{}/{}",
+        config.archive_root.clone(),
+        system.directory.as_str()
+    );
 
     // saves a lot of indentation in the `for` loop
     let archive_iterator = || {
-        std::path::Path::new(system_path)
+        std::path::Path::new(&system_path)
             .read_dir()
             .unwrap()
             .filter_map(Result::ok)
