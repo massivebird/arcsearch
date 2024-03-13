@@ -1,15 +1,11 @@
+use self::config::Config;
 use arcconfig::{read_config, system::System};
 use regex::Regex;
-use self::config::Config;
-use std::{fs::DirEntry, result::Result, io};
+use std::{fs::DirEntry, io, result::Result};
 
 pub mod config;
 
-fn query_system(
-    config: &Config,
-    system: &System,
-    num_matches: &mut u32,
-) {
+fn query_system(config: &Config, system: &System, num_matches: &mut u32) {
     let system_path = format!(
         "{}/{}",
         config.archive_root.clone(),
@@ -26,8 +22,8 @@ fn query_system(
     };
 
     for entry in archive_iterator() {
-        if system.games_are_directories && entry.path().is_file() ||
-        !system.games_are_directories && entry.path().is_dir()
+        if system.games_are_directories && entry.path().is_file()
+            || !system.games_are_directories && entry.path().is_dir()
         {
             continue;
         }
@@ -51,12 +47,13 @@ fn query_system(
 pub fn run(config: &Config) -> Result<(), io::Error> {
     let systems: Vec<System> = read_config(&config.archive_root)
         .into_iter()
-        .filter(|s| config.desired_systems.clone().map_or(
-            true,
-            |labels| labels.contains(&s.label)
-        ))
+        .filter(|s| {
+            config
+                .desired_systems
+                .clone()
+                .map_or(true, |labels| labels.contains(&s.label))
+        })
         .collect();
-
 
     let mut num_matches: u32 = 0;
 
@@ -87,4 +84,3 @@ fn clean_game_name(game_name: &str) -> String {
 fn is_not_bios_dir(entry: &DirEntry) -> bool {
     !entry.path().to_string_lossy().contains("!bios")
 }
-
