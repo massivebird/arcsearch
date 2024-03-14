@@ -17,8 +17,12 @@
       let
         pkgs = import nixpkgs { inherit system; };
         naersk-lib = pkgs.callPackage naersk { };
-      in {
+      in
+      {
+        # for `nix build` and `nix run`:
         packages.default = naersk-lib.buildPackage ./.;
+
+        # for `nix develop`:
         shells.default = with pkgs;
           mkShell {
             buildInputs =
