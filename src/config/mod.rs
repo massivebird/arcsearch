@@ -10,7 +10,8 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new() -> Self {
+    /// Generates configuration options based on command line arguments.
+    pub fn generate() -> Self {
         let matches = cli::build_args().get_matches();
 
         let get_arg = |arg_name: &str| -> Option<&String> { matches.get_one::<String>(arg_name) };
