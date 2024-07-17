@@ -35,11 +35,7 @@ fn main() {
 }
 
 fn query_system(config: &Config, system: &System, num_matches: &mut u32) {
-    let system_path = format!(
-        "{}/{}",
-        config.archive_root.clone(),
-        system.directory.as_str()
-    );
+    let system_path = format!("{}/{}", config.archive_root, system.directory);
 
     for entry in Path::new(&system_path)
         .read_dir()
@@ -75,7 +71,7 @@ fn clean_game_name(game_name: &str) -> &str {
     Regex::new(&patterns.join("|"))
         .expect("invalid replace expression")
         .find(game_name)
-        .map_or(game_name, |i| &game_name[..i.start()])
+        .map_or(game_name, |idx| &game_name[..idx.start()])
 }
 
 fn is_not_bios_dir(entry: &DirEntry) -> bool {
