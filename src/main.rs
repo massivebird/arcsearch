@@ -55,12 +55,12 @@ fn query_system(config: &Config, system: &System, num_matches: &mut u32) {
 
         let path = &entry.path();
         let filename = path
-            .file_name()
+            .file_stem()
             .expect("unable to extract file name from entry")
             .to_string_lossy();
 
         // "Shadowrun"
-        let game_name = &clean_game_name(&filename);
+        let game_name = &clean_game_name(&filename).trim_end();
 
         if config.query.is_match(game_name) {
             println!("[ {} ] {game_name}", system.pretty_string);
@@ -70,11 +70,12 @@ fn query_system(config: &Config, system: &System, num_matches: &mut u32) {
 }
 
 fn clean_game_name(game_name: &str) -> &str {
-    let patterns = [r"\(.*\)", r"\[.*\]", r"\.[^ ]+$"];
+    let patterns = [r"\(.*\)", r"\[.*\]"];
+
     Regex::new(&patterns.join("|"))
         .expect("invalid replace expression")
         .find(game_name)
-        .map_or(game_name, |i| &game_name[..i.start() - 1])
+        .map_or(game_name, |i| &game_name[..i.start()])
 }
 
 fn is_not_bios_dir(entry: &DirEntry) -> bool {
