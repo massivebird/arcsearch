@@ -60,7 +60,7 @@ fn query_system(config: &Config, system: &System, num_matches: &mut u32) {
             .to_string_lossy();
 
         // "Shadowrun"
-        let game_name = &clean_game_name(&filename).trim_end();
+        let game_name = clean_game_name(&filename).trim_end();
 
         if config.query.is_match(game_name) {
             println!("[ {} ] {game_name}", system.pretty_string);
