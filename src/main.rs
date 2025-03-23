@@ -14,8 +14,7 @@ fn main() {
         .filter(|s| {
             config
                 .desired_systems
-                .clone()
-                .map_or(true, |labels| labels.contains(&s.label))
+                .clone().is_none_or(|labels| labels.contains(&s.label))
         })
         .collect();
 
