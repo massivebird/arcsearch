@@ -13,7 +13,7 @@ I'm new at this, so expect imperfection ;_; I'm trying!
 
 + Massive performance improvements by implementing an async runtime
 
-> Average runtime reduced from 571.6ms to 218.3ms!!!
+> Average runtime (querying 1205 games) reduced from 605.4 ms to 227.2 ms !!!
 
 ## [0.2.6] - 2024-02-24
 
