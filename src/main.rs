@@ -1,9 +1,7 @@
 use self::config::Config;
 use arcconfig::{read_config, system::System};
 use regex::Regex;
-use std::collections::VecDeque;
-use std::path::Path;
-use std::{fs::DirEntry, result::Result};
+use std::{collections::VecDeque, fs::DirEntry, path::Path, result::Result};
 use tokio::spawn;
 
 mod config;
@@ -27,7 +25,7 @@ async fn main() {
     for system in systems.clone() {
         let config = config.clone();
         dbg!(&system.label);
-        handles.push_back(spawn(query_system(config, system)));
+        handles.push_back(spawn(async { query_system(config, system) }));
     }
 
     let mut num_matches: u32 = 0;
@@ -51,7 +49,7 @@ async fn main() {
     );
 }
 
-async fn query_system(config: Config, system: System) -> Vec<String> {
+fn query_system(config: Config, system: System) -> Vec<String> {
     let mut games: Vec<String> = Vec::new();
 
     let system_path = format!("{}/{}", config.archive_root, system.directory);
