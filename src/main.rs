@@ -24,7 +24,6 @@ async fn main() {
 
     for system in systems.clone() {
         let config = config.clone();
-        dbg!(&system.label);
         handles.push_back(spawn(async { query_system(config, system) }));
     }
 
