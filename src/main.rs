@@ -1,12 +1,15 @@
 use self::config::Config;
 use arcconfig::{read_config, system::System};
 use regex::Regex;
+use std::collections::VecDeque;
 use std::path::Path;
 use std::{fs::DirEntry, result::Result};
+use tokio::spawn;
 
 mod config;
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let config = Config::generate();
 
     let systems: Vec<System> = read_config(&config.archive_root)
@@ -14,14 +17,29 @@ fn main() {
         .filter(|s| {
             config
                 .desired_systems
-                .clone().is_none_or(|labels| labels.contains(&s.label))
+                .clone()
+                .is_none_or(|labels| labels.contains(&s.label))
         })
         .collect();
+
+    let mut handles = VecDeque::new();
+
+    for system in systems.clone() {
+        let config = config.clone();
+        dbg!(&system.label);
+        handles.push_back(spawn(query_system(config, system)));
+    }
 
     let mut num_matches: u32 = 0;
 
     for system in systems {
-        query_system(&config, &system, &mut num_matches);
+        let games = handles.pop_front().unwrap().await.unwrap();
+
+        num_matches += u32::try_from(games.len()).unwrap();
+
+        for game in games {
+            println!("[ {} ] {game}", system.pretty_string);
+        }
     }
 
     println!(
@@ -33,7 +51,9 @@ fn main() {
     );
 }
 
-fn query_system(config: &Config, system: &System, num_matches: &mut u32) {
+async fn query_system(config: Config, system: System) -> Vec<String> {
+    let mut games: Vec<String> = Vec::new();
+
     let system_path = format!("{}/{}", config.archive_root, system.directory);
 
     for entry in Path::new(&system_path)
@@ -58,10 +78,13 @@ fn query_system(config: &Config, system: &System, num_matches: &mut u32) {
         let game_name = clean_game_name(&filename).trim_end();
 
         if config.query.is_match(game_name) {
-            println!("[ {} ] {game_name}", system.pretty_string);
-            *num_matches += 1;
+            games.push(game_name.to_string());
+            // println!("[ {} ] {game_name}", system.pretty_string);
+            // *num_matches += 1;
         }
     }
+
+    games
 }
 
 fn clean_game_name(game_name: &str) -> &str {
