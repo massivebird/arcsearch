@@ -88,7 +88,7 @@ dependencies = [
 
 [[package]]
 name = "arcsearch"
-version = "0.2.6"
+version = "0.2.7"
 dependencies = [
  "arcconfig",
  "clap",
