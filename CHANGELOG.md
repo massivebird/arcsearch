@@ -19,7 +19,7 @@ I'm new at this, so expect imperfection ;_; I'm trying!
 
 ### Updates
 
-+ Updates arcconfig depenedency => 0.3.1
++ Updates arcconfig dependency => 0.3.1
   + Versions will be more explicit from now on
 
 ## [0.2.5] - 2024-01-23
