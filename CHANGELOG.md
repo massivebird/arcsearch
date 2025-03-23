@@ -7,11 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 I'm new at this, so expect imperfection ;_; I'm trying!
 
+## [0.2.7] - 2025-03-23
+
+### Changes
+
++ Massive performance improvements by implementing an async runtime
+
+> Average runtime (querying 1205 games) reduced from 605.4 ms to 227.2 ms !!!
+
+### Updates
+
++ Updated `colored` crate to 3.0.0
+
 ## [0.2.6] - 2024-02-24
 
 ### Updates
 
-+ Updates arcconfig depenedency => 0.3.1
++ Updates arcconfig dependency => 0.3.1
   + Versions will be more explicit from now on
 
 ## [0.2.5] - 2024-01-23
