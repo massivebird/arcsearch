@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 I'm new at this, so expect imperfection ;_; I'm trying!
 
+## [0.2.8] - 2025-03-30
+
+### Changes
+
++ Fixed directory name parsing (was incorrectly truncating dot (`.`) characters)
+
 ## [0.2.7] - 2025-03-23
 
 ### Changes
