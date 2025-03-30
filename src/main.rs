@@ -66,10 +66,16 @@ fn query_system(config: Config, system: System) -> Vec<String> {
         }
 
         let path = &entry.path();
-        let filename = path
-            .file_stem()
-            .expect("unable to extract file name from entry")
-            .to_string_lossy();
+        let filename = {
+            // Do not modify directory names since they do not have extensions.
+            if entry.path().is_dir() {
+                path.to_string_lossy()
+            } else {
+                path.file_stem()
+                    .expect("unable to extract file name from entry")
+                    .to_string_lossy()
+            }
+        };
 
         // "Shadowrun"
         let game_name = clean_game_name(&filename).trim_end();
