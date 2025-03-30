@@ -69,7 +69,7 @@ fn query_system(config: Config, system: System) -> Vec<String> {
         let filename = {
             // Do not modify directory names since they do not have extensions.
             if entry.path().is_dir() {
-                path.to_string_lossy()
+                path.file_name().unwrap().to_string_lossy()
             } else {
                 path.file_stem()
                     .expect("unable to extract file name from entry")
