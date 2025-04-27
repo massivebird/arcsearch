@@ -24,7 +24,7 @@ async fn main() {
 
     for system in systems.clone() {
         let config = config.clone();
-        handles.push_back(spawn(async { query_system(config, system) }));
+        handles.push_back(spawn(async move { query_system(&config, system) }));
     }
 
     let mut num_matches: u32 = 0;
@@ -48,7 +48,7 @@ async fn main() {
     );
 }
 
-fn query_system(config: Config, system: System) -> Vec<String> {
+fn query_system(config: &Config, system: System) -> Vec<String> {
     let mut games: Vec<String> = Vec::new();
 
     let system_path = config.archive_root.join(system.directory);
