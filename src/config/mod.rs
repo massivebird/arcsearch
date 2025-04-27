@@ -1,11 +1,11 @@
 use regex::Regex;
-use std::env;
+use std::{env, path::PathBuf};
 
 mod cli;
 
 #[derive(Clone)]
 pub struct Config {
-    pub archive_root: String,
+    pub archive_root: PathBuf,
     pub query: Regex,
     pub desired_systems: Option<Vec<String>>,
 }
@@ -17,12 +17,16 @@ impl Config {
 
         let get_arg = |arg_name: &str| -> Option<&String> { matches.get_one::<String>(arg_name) };
 
-        let archive_root: String = get_arg("archive_root").map_or_else(
+        let archive_root: PathBuf = {
+            let value = get_arg("archive_root").map_or_else(
             || env::var("VG_ARCHIVE").unwrap_or_else(
                 |_| panic!("Please supply an archive path via argument or VG_ARCHIVE environment variable.")
             ),
             String::to_string
         );
+
+            PathBuf::from(value)
+        };
 
         let query: Regex = {
             let raw_query = if matches.get_flag("all") {

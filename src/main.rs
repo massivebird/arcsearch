@@ -51,7 +51,7 @@ async fn main() {
 fn query_system(config: Config, system: System) -> Vec<String> {
     let mut games: Vec<String> = Vec::new();
 
-    let system_path = format!("{}/{}", config.archive_root, system.directory);
+    let system_path = config.archive_root.join(system.directory);
 
     for entry in Path::new(&system_path)
         .read_dir()
