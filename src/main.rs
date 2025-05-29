@@ -68,23 +68,22 @@ fn query_system(config: &Config, system: System) -> Vec<String> {
         let path = &entry.path();
 
         let filename = {
-            // Do not modify directory names since they do not have extensions.
-            if entry.path().is_dir() {
+            let part = if entry.path().is_dir() || config.titles_as_filenames {
                 path.file_name()
-                    .expect("unable to extract filename from directory")
-                    .to_string_lossy()
-            } else if config.titles_as_filenames {
-                path.file_name()
-                    .expect("unable to extract filename from normal file")
-                    .to_string_lossy()
             } else {
+                // Trim extension off of normal files, unless otherwise specified
                 path.file_stem()
-                    .expect("unable to extract file stem from normal file")
-                    .to_string_lossy()
-            }
+            };
+
+            let Some(part) = part else {
+                panic!("Failed to extract filename from path: {path:?}");
+            };
+
+            part.to_string_lossy()
         };
 
-        // "Shadowrun"
+        // Format game name to user specification.
+        // Could be "Pokemon Snap", or "Pokemon Snap (USA).n64"
         let game_name = {
             if config.titles_as_filenames {
                 &filename
@@ -95,8 +94,6 @@ fn query_system(config: &Config, system: System) -> Vec<String> {
 
         if config.query.is_match(game_name) {
             games.push(game_name.to_string());
-            // println!("[ {} ] {game_name}", system.pretty_string);
-            // *num_matches += 1;
         }
     }
 
