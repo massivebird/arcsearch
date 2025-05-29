@@ -17,39 +17,32 @@ pub fn build_args() -> Command {
         Display all games. Incompatible with the <query> argument.\
 ";
 
-    command!()
-        .arg(
-            Arg::new("desired_systems")
-                .short('s')
-                .long("systems")
-                .help("Query specified systems")
-                .long_help(desired_systems_long_help)
-                .value_name("labels"),
-        )
-        .arg(
-            Arg::new("archive_root")
-                .short('r')
-                .long("archive-root")
-                .alias("archive-path")
-                .help("Provide the path to your archive root")
-                .long_help(archive_root_long_help)
-                .value_name("PATH")
-                .value_hint(ValueHint::DirPath),
-        )
-        .arg(
-            Arg::new("all")
-                .short('a')
-                .long("all")
-                .required(false)
-                .conflicts_with("query")
-                .action(clap::ArgAction::SetTrue)
-                .help("Display all games")
-                .long_help(all_long_help),
-        )
-        .arg(
-            Arg::new("query")
-                .required(true)
-                .help("Regex query")
-                .long_help(query_long_help),
-        )
+    command!().args([
+        Arg::new("desired_systems")
+            .short('s')
+            .long("systems")
+            .help("Query specified systems")
+            .long_help(desired_systems_long_help)
+            .value_name("labels"),
+        Arg::new("archive_root")
+            .short('r')
+            .long("archive-root")
+            .alias("archive-path")
+            .help("Provide the path to your archive root")
+            .long_help(archive_root_long_help)
+            .value_name("PATH")
+            .value_hint(ValueHint::DirPath),
+        Arg::new("all")
+            .short('a')
+            .long("all")
+            .required(false)
+            .conflicts_with("query")
+            .action(clap::ArgAction::SetTrue)
+            .help("Display all games")
+            .long_help(all_long_help),
+        Arg::new("query")
+            .required(true)
+            .help("Regex query")
+            .long_help(query_long_help),
+    ])
 }
