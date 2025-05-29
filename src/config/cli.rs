@@ -49,8 +49,7 @@ pub fn build_args() -> Command {
             .long("filenames")
             .action(clap::ArgAction::SetTrue)
             .help("Print game titles as raw filenames.")
-            .long_help(filenames_long_help)
-        ,
+            .long_help(filenames_long_help),
         Arg::new("query")
             .required(true)
             .help("Regex query")
