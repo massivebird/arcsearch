@@ -6,7 +6,7 @@ pub fn build_args() -> Command {
 ";
 
     let desired_systems_long_help = "\
-        Query specified systems with comma-seperated system labels.\
+        Query specified systems with comma-separated system labels.\
 ";
 
     let archive_root_long_help = "\
@@ -15,6 +15,10 @@ pub fn build_args() -> Command {
 
     let all_long_help = "\
         Display all games. Incompatible with the <query> argument.\
+";
+
+    let filenames_long_help = "\
+        Print filenames as they appear in the file system, rather than truncate certain elements. Retains file extensions, regional codes (e.g. \"(USA, Europe)\"), disk indicators (e.g. \"(Disk 2)\"), and other codes.
 ";
 
     command!().args([
@@ -40,6 +44,13 @@ pub fn build_args() -> Command {
             .action(clap::ArgAction::SetTrue)
             .help("Display all games")
             .long_help(all_long_help),
+        Arg::new("filenames")
+            .short('f')
+            .long("filenames")
+            .action(clap::ArgAction::SetTrue)
+            .help("Print game titles as raw filenames.")
+            .long_help(filenames_long_help)
+        ,
         Arg::new("query")
             .required(true)
             .help("Regex query")

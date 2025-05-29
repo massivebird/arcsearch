@@ -8,6 +8,7 @@ pub struct Config {
     pub archive_root: PathBuf,
     pub query: Regex,
     pub desired_systems: Option<Vec<String>>,
+    pub titles_as_filenames: bool,
 }
 
 impl Config {
@@ -45,6 +46,7 @@ impl Config {
             archive_root,
             query,
             desired_systems,
+            titles_as_filenames: matches.get_flag("filenames")
         }
     }
 }
