@@ -92,6 +92,7 @@ version = "0.2.9"
 dependencies = [
  "arcconfig",
  "clap",
+ "clap_complete",
  "colored 3.0.0",
  "regex",
  "tokio",
@@ -137,6 +138,15 @@ dependencies = [
  "anstyle",
  "clap_lex",
  "strsim",
+]
+
+[[package]]
+name = "clap_complete"
+version = "4.5.52"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1a554639e42d0c838336fc4fbedb9e2df3ad1fa4acda149f9126b4ccfcd7900f"
+dependencies = [
+ "clap",
 ]
 
 [[package]]

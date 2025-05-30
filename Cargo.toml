@@ -3,6 +3,13 @@ name = "arcsearch"
 version = "0.2.9"
 edition = "2021"
 
+# Generate shell completions at compile time
+build = "build.rs"
+
+[build-dependencies]
+clap = { version = "4.4.11", features = ["cargo"] }
+clap_complete = "4.5.52"
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
