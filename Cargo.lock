@@ -78,8 +78,9 @@ dependencies = [
 
 [[package]]
 name = "arcconfig"
-version = "0.4.0"
-source = "git+https://github.com/massivebird/arcconfig?branch=radicalizing#82d7fe9a740967dd091c224e7594251469c69f73"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f8ebfc82fde3f4f88a6f3c8b332a406db0c57998d51646250a7d0257339b2ccb"
 dependencies = [
  "colored 2.2.0",
  "yaml-rust",
