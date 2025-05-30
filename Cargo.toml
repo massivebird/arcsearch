@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-arcconfig = "0.4.0"
+arcconfig = { path = "/home/penguino/p-rs/arcconfig/" }
 clap = { version = "4.4.11", features = ["cargo"] }
 colored = "3.0.0"
 regex = "1.8.2"

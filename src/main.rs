@@ -1,5 +1,5 @@
 use self::config::Config;
-use arcconfig::{read_config, system::System};
+use arcconfig::{config_file::ConfigFile, system::System};
 use regex::Regex;
 use std::{collections::VecDeque, fs::DirEntry, path::Path, result::Result};
 use tokio::spawn;
@@ -10,7 +10,10 @@ mod config;
 async fn main() {
     let config = Config::generate();
 
-    let systems: Vec<System> = read_config(&config.archive_root)
+    let systems: Vec<System> = ConfigFile::from_archive(&config.archive_root)
+        .unwrap()
+        .systems()
+        .unwrap()
         .into_iter()
         .filter(|s| {
             config
@@ -35,7 +38,7 @@ async fn main() {
         num_matches += u32::try_from(games.len()).unwrap();
 
         for game in games {
-            println!("[ {} ] {game}", system.pretty_string);
+            println!("[ {system} ] {game}");
         }
     }
 
