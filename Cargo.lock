@@ -92,7 +92,7 @@ version = "0.2.9"
 dependencies = [
  "arcconfig",
  "clap",
- "clap_complete",
+ "clap_complete_command",
  "colored 3.0.0",
  "regex",
  "tokio",
@@ -147,6 +147,27 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1a554639e42d0c838336fc4fbedb9e2df3ad1fa4acda149f9126b4ccfcd7900f"
 dependencies = [
  "clap",
+]
+
+[[package]]
+name = "clap_complete_command"
+version = "0.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "da8e198c052315686d36371e8a3c5778b7852fc75cc313e4e11eeb7a644a1b62"
+dependencies = [
+ "clap",
+ "clap_complete",
+ "clap_complete_nushell",
+]
+
+[[package]]
+name = "clap_complete_nushell"
+version = "4.5.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9801fe85d7986742027c6d365728a6a4ecb6d2b09866de18be836fef7ebf7df1"
+dependencies = [
+ "clap",
+ "clap_complete",
 ]
 
 [[package]]

@@ -14,7 +14,18 @@ pub struct Config {
 impl Config {
     /// Generates configuration options based on command line arguments.
     pub fn generate() -> Self {
-        let matches = cli::build_args().get_matches();
+        let cli = cli::build_cli();
+
+        let matches = cli.get_matches();
+
+        // Generate CLI completions for specified shell, then exit.
+        if let Some(shell) = matches.get_one::<clap_complete_command::Shell>("completions") {
+            let mut cli = cli::build_cli();
+
+            shell.generate(&mut cli, &mut std::io::stdout());
+
+            std::process::exit(0);
+        }
 
         let get_arg = |arg_name: &str| -> Option<&String> { matches.get_one::<String>(arg_name) };
 
@@ -46,7 +57,7 @@ impl Config {
             archive_root,
             query,
             desired_systems,
-            titles_as_filenames: matches.get_flag("filenames")
+            titles_as_filenames: matches.get_flag("filenames"),
         }
     }
 }

@@ -1,6 +1,6 @@
 use clap::{command, Arg, Command, ValueHint};
 
-pub fn build_args() -> Command {
+pub fn build_cli() -> Command {
     let query_long_help = "\
         Regex pattern used to query the archive.
 ";
@@ -48,11 +48,17 @@ pub fn build_args() -> Command {
             .short('f')
             .long("filenames")
             .action(clap::ArgAction::SetTrue)
-            .help("Print game titles as raw filenames.")
+            .help("Print game titles as raw filenames")
             .long_help(filenames_long_help),
         Arg::new("query")
             .required(true)
-            .help("Regex query")
+            .help("Regular expression query")
             .long_help(query_long_help),
+        Arg::new("completions")
+            .long("completions")
+            .help("Generate shell completions")
+            .exclusive(true)
+            .value_name("shell")
+            .value_parser(clap::builder::EnumValueParser::<clap_complete_command::Shell>::new()),
     ])
 }
