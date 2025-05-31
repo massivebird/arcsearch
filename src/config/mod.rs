@@ -19,7 +19,11 @@ impl Config {
         let matches = cli.get_matches();
 
         // Generate CLI completions for specified shell, then exit.
-        if let Some(shell) = matches.get_one::<clap_complete_command::Shell>("completions") {
+        if let Some(sub_matches) = matches.subcommand_matches("completions") {
+            let shell = sub_matches
+                .get_one::<clap_complete_command::Shell>("shell")
+                .unwrap();
+
             let mut cli = cli::build_cli();
 
             shell.generate(&mut cli, &mut std::io::stdout());

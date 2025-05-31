@@ -18,47 +18,55 @@ pub fn build_cli() -> Command {
 ";
 
     let filenames_long_help = "\
-        Print filenames as they appear in the file system, rather than truncate certain elements. Retains file extensions, regional codes (e.g. \"(USA, Europe)\"), disk indicators (e.g. \"(Disk 2)\"), and other codes.
+        Print filenames as they appear in the file system, rather than truncate certain elements. Retains file extensions, regional codes (e.g. \"(USA, Europe)\"), disk indicators (e.g. \"(Disk 2)\"), and other codes.\
 ";
 
-    command!().args([
-        Arg::new("desired_systems")
-            .short('s')
-            .long("systems")
-            .help("Query specified systems")
-            .long_help(desired_systems_long_help)
-            .value_name("labels"),
-        Arg::new("archive_root")
-            .short('r')
-            .long("archive-root")
-            .alias("archive-path")
-            .help("Provide the path to your archive root")
-            .long_help(archive_root_long_help)
-            .value_name("PATH")
-            .value_hint(ValueHint::DirPath),
-        Arg::new("all")
-            .short('a')
-            .long("all")
-            .required(false)
-            .conflicts_with("query")
-            .action(clap::ArgAction::SetTrue)
-            .help("Display all games")
-            .long_help(all_long_help),
-        Arg::new("filenames")
-            .short('f')
-            .long("filenames")
-            .action(clap::ArgAction::SetTrue)
-            .help("Print game titles as raw filenames")
-            .long_help(filenames_long_help),
-        Arg::new("query")
-            .required(true)
-            .help("Regular expression query")
-            .long_help(query_long_help),
-        Arg::new("completions")
-            .long("completions")
-            .help("Generate shell completions")
-            .exclusive(true)
-            .value_name("shell")
-            .value_parser(clap::builder::EnumValueParser::<clap_complete_command::Shell>::new()),
-    ])
+    command!()
+        .args_conflicts_with_subcommands(true)
+        .subcommand(
+            Command::new("completions")
+                .about("Generate shell completions")
+                .arg(
+                    Arg::new("shell")
+                        .required(true)
+                        .value_name("shell")
+                        .value_parser(
+                            clap::builder::EnumValueParser::<clap_complete_command::Shell>::new(),
+                        ),
+                ),
+        )
+        .args([
+            Arg::new("desired_systems")
+                .short('s')
+                .long("systems")
+                .help("Query specified systems")
+                .long_help(desired_systems_long_help)
+                .value_name("labels"),
+            Arg::new("archive_root")
+                .short('r')
+                .long("archive-root")
+                .alias("archive-path")
+                .help("Provide the path to your archive root")
+                .long_help(archive_root_long_help)
+                .value_name("PATH")
+                .value_hint(ValueHint::DirPath),
+            Arg::new("all")
+                .short('a')
+                .long("all")
+                .required(false)
+                .conflicts_with("query")
+                .action(clap::ArgAction::SetTrue)
+                .help("Display all games")
+                .long_help(all_long_help),
+            Arg::new("filenames")
+                .short('f')
+                .long("filenames")
+                .action(clap::ArgAction::SetTrue)
+                .help("Print game titles as raw filenames")
+                .long_help(filenames_long_help),
+            Arg::new("query")
+                .required(true)
+                .help("Regular expression query")
+                .long_help(query_long_help),
+        ])
 }
