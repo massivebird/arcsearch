@@ -18,7 +18,7 @@ async fn main() {
         .filter(|s| {
             config
                 .desired_systems
-                .clone()
+                .as_ref()
                 .is_none_or(|labels| labels.contains(&s.label))
         })
         .collect();
