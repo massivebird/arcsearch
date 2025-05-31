@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-+ Added `-f/--filenames` flag, prints filenames instead of "clean" game titles.
++ Added `-f/--filenames` flag, which prints filenames instead of "clean" game titles.
++ Added the subcommand `completions <shell>`, which prints command completions for the specified shell.
 
 ### Updated
 
