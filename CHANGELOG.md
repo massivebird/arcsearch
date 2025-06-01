@@ -9,14 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-+ Added `-c/--count` flag, which only prints the number of matches.
++ Added `-c/--count` flag, which only prints the number of matches. (#25)
 
 ## [0.2.10] - 2025-05-30
 
 ### Added
 
 + Added `-f/--filenames` flag, which prints filenames instead of "clean" game titles.
-+ Added the subcommand `completions <shell>`, which prints command completions for the specified shell.
++ Added the subcommand `completions <shell>`, which prints command completions for the specified shell. (#14)
 
 ### Updated
 
@@ -38,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes
 
-+ Massive performance improvements by implementing an async runtime
++ Massive performance improvements by implementing an async runtime (#21)
 
 > Average runtime (querying 1205 games) reduced from 605.4 ms to 227.2 ms !!!
 
