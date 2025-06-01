@@ -52,7 +52,13 @@ impl Config {
                 get_arg("query").unwrap()
             };
 
-            Regex::new(&format!("(?i){raw_query}")).expect("Invalid regex query")
+            let opts = if matches.get_flag("case_sensitive") {
+                ""
+            } else {
+                "(?i)"
+            };
+
+            Regex::new(&format!("{opts}{raw_query}")).expect("Invalid regex query")
         };
 
         let desired_systems: Option<Vec<String>> = get_arg("desired_systems")

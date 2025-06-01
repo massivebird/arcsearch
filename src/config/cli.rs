@@ -63,6 +63,10 @@ pub fn build_cli() -> Command {
                 .action(clap::ArgAction::SetTrue)
                 .help("Display all games")
                 .long_help(all_long_help),
+            Arg::new("case_sensitive")
+                .long("case-sensitive")
+                .action(clap::ArgAction::SetTrue)
+                .help("Execute query case sensitively"),
             Arg::new("filenames")
                 .short('f')
                 .long("filenames")
