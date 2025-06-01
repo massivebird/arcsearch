@@ -1,4 +1,4 @@
-use clap::{command, Arg, Command, ValueHint};
+use clap::{command, Arg, ArgGroup, Command, ValueHint};
 
 pub fn build_cli() -> Command {
     let query_long_help = "\
@@ -35,26 +35,23 @@ pub fn build_cli() -> Command {
                         ),
                 ),
         )
+        .arg(
+            Arg::new("query")
+                .required(true)
+                .hide(true)
+                .help("Regular expression query")
+                .long_help(query_long_help),
+        )
+        .next_help_heading("Search options")
         .args([
-            Arg::new("desired_systems")
-                .short('s')
-                .long("systems")
-                .help("Query specified systems")
-                .long_help(desired_systems_long_help)
-                .value_name("labels"),
             Arg::new("archive_root")
                 .short('r')
                 .long("archive-root")
                 .alias("archive-path")
                 .help("Provide the path to your archive root")
                 .long_help(archive_root_long_help)
-                .value_name("PATH")
+                .value_name("path")
                 .value_hint(ValueHint::DirPath),
-            Arg::new("count")
-                .short('c')
-                .long("count")
-                .action(clap::ArgAction::SetTrue)
-                .help("Only print number of matches"),
             Arg::new("all")
                 .short('a')
                 .long("all")
@@ -63,19 +60,29 @@ pub fn build_cli() -> Command {
                 .action(clap::ArgAction::SetTrue)
                 .help("Display all games")
                 .long_help(all_long_help),
+            Arg::new("desired_systems")
+                .short('s')
+                .long("systems")
+                .help("Query specified systems")
+                .long_help(desired_systems_long_help)
+                .value_name("labels"),
             Arg::new("case_sensitive")
                 .long("case-sensitive")
                 .action(clap::ArgAction::SetTrue)
                 .help("Execute query case sensitively"),
+        ])
+        .next_help_heading("Output options")
+        .args([
+            Arg::new("count")
+                .short('c')
+                .long("count")
+                .action(clap::ArgAction::SetTrue)
+                .help("Only print number of matches"),
             Arg::new("filenames")
                 .short('f')
                 .long("filenames")
                 .action(clap::ArgAction::SetTrue)
                 .help("Print game titles as raw filenames")
                 .long_help(filenames_long_help),
-            Arg::new("query")
-                .required(true)
-                .help("Regular expression query")
-                .long_help(query_long_help),
         ])
 }
