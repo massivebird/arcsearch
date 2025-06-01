@@ -9,6 +9,7 @@ pub struct Config {
     pub query: Regex,
     pub desired_systems: Option<Vec<String>>,
     pub titles_as_filenames: bool,
+    pub only_print_count: bool,
 }
 
 impl Config {
@@ -62,6 +63,7 @@ impl Config {
             query,
             desired_systems,
             titles_as_filenames: matches.get_flag("filenames"),
+            only_print_count: matches.get_flag("count"),
         }
     }
 }

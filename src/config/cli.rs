@@ -50,6 +50,11 @@ pub fn build_cli() -> Command {
                 .long_help(archive_root_long_help)
                 .value_name("PATH")
                 .value_hint(ValueHint::DirPath),
+            Arg::new("count")
+                .short('c')
+                .long("count")
+                .action(clap::ArgAction::SetTrue)
+                .help("Only print number of matches"),
             Arg::new("all")
                 .short('a')
                 .long("all")

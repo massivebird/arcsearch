@@ -37,18 +37,27 @@ async fn main() {
 
         num_matches += u32::try_from(games.len()).unwrap();
 
+        // Check if user suppresses matches output.
+        if config.only_print_count {
+            continue;
+        }
+
         for game in games {
             println!("[ {system} ] {game}");
         }
     }
 
-    println!(
-        "{num_matches} {noun} found.",
-        noun = match num_matches {
-            1 => "game",
-            _ => "games",
-        }
-    );
+    if config.only_print_count {
+        println!("{num_matches}");
+    } else {
+        println!(
+            "{num_matches} {noun} found.",
+            noun = match num_matches {
+                1 => "game",
+                _ => "games",
+            }
+        );
+    }
 }
 
 fn query_system(config: &Config, system: System) -> Vec<String> {
