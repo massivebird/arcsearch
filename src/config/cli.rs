@@ -1,4 +1,4 @@
-use clap::{command, Arg, ArgGroup, Command, ValueHint};
+use clap::{command, Arg, Command, ValueHint};
 
 pub fn build_cli() -> Command {
     let query_long_help = "\

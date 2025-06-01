@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 + Added `-c/--count` flag, which only prints the number of matches. (#25)
 + Added `--case-sensitive` flag, which enables case-sensitive querying. (#23)
++ Added option categories in help menus.
 
 ## [0.2.10] - 2025-05-30
 
