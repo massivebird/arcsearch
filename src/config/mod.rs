@@ -1,18 +1,24 @@
+use arcconfig::{config_file::ConfigFile, system::System};
 use regex::Regex;
 use std::{env, path::PathBuf};
 
 mod cli;
 
 #[derive(Clone)]
-pub struct Config {
-    pub archive_root: PathBuf,
+pub struct App {
     pub query: Regex,
-    pub desired_systems: Option<Vec<String>>,
+    pub archive_root: PathBuf,
+
+    /// Systems as specified by configuration file.
+    pub systems: Vec<System>,
+
+    /// Print game titles as their plain filenames.
     pub titles_as_filenames: bool,
-    pub only_print_count: bool,
+    /// Only print number of matching games.
+    pub count_mode: bool,
 }
 
-impl Config {
+impl App {
     /// Generates configuration options based on command line arguments.
     pub fn generate() -> Self {
         let cli = cli::build_cli();
@@ -61,15 +67,30 @@ impl Config {
             Regex::new(&format!("{opts}{raw_query}")).expect("Invalid regex query")
         };
 
-        let desired_systems: Option<Vec<String>> = get_arg("desired_systems")
-            .map(|labels| labels.split(',').map(ToString::to_string).collect());
+        let systems: Vec<System> = {
+            // If the user specified some system labels, only query these systems.
+            let desired_systems: Option<Vec<String>> = get_arg("desired_systems")
+                .map(|labels| labels.split(',').map(ToString::to_string).collect());
+
+            ConfigFile::from_archive(&archive_root)
+                .unwrap()
+                .systems()
+                .unwrap()
+                .into_iter()
+                .filter(|s| {
+                    desired_systems
+                        .as_ref()
+                        .is_none_or(|labels| labels.contains(&s.label))
+                })
+                .collect()
+        };
 
         Self {
+            systems,
             archive_root,
             query,
-            desired_systems,
             titles_as_filenames: matches.get_flag("filenames"),
-            only_print_count: matches.get_flag("count"),
+            count_mode: matches.get_flag("count"),
         }
     }
 }
