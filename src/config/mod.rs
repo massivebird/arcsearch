@@ -20,8 +20,8 @@ pub struct App {
 
 impl App {
     /// Generates configuration options based on command line arguments.
-    pub fn generate() -> Self {
-        let cli = cli::build_cli();
+    pub fn build() -> Self {
+        let cli = cli::build();
 
         let matches = cli.get_matches();
 
@@ -31,13 +31,14 @@ impl App {
                 .get_one::<clap_complete_command::Shell>("shell")
                 .unwrap();
 
-            let mut cli = cli::build_cli();
+            let mut cli = cli::build();
 
             shell.generate(&mut cli, &mut std::io::stdout());
 
             std::process::exit(0);
         }
 
+        // Shortcut for retrieving a command line argument.
         let get_arg = |arg_name: &str| -> Option<&String> { matches.get_one::<String>(arg_name) };
 
         let archive_root: PathBuf = {

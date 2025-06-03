@@ -8,7 +8,7 @@ mod config;
 
 #[tokio::main]
 async fn main() {
-    let app = App::generate();
+    let app = App::build();
 
     let mut handles = VecDeque::new();
 

@@ -1,6 +1,6 @@
 use clap::{command, Arg, Command, ValueHint};
 
-pub fn build_cli() -> Command {
+pub fn build() -> Command {
     let query_long_help = "\
         Regex pattern used to query the archive.
 ";
