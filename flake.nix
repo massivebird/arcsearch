@@ -12,22 +12,25 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils, naersk }:
+  outputs = { self, flake-utils, naersk, nixpkgs }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = import nixpkgs { inherit system; };
-        naersk-lib = pkgs.callPackage naersk { };
-      in
-      {
-        # for `nix build` and `nix run`:
-        packages.default = naersk-lib.buildPackage ./.;
+        pkgs = (import nixpkgs) {
+          inherit system;
+        };
 
-        # for `nix develop`:
-        shells.default = with pkgs;
-          mkShell {
-            buildInputs =
-              [ cargo rustc rustfmt pre-commit rustPackages.clippy ];
-            RUST_SRC_PATH = rustPlatform.rustLibSrc;
-          };
-      });
+        naersk' = pkgs.callPackage naersk {};
+
+      in rec {
+        # For `nix build` & `nix run`:
+        defaultPackage = naersk'.buildPackage {
+          src = ./.;
+        };
+
+        # For `nix develop` (optional, can be skipped):
+        devShell = pkgs.mkShell {
+          nativeBuildInputs = with pkgs; [ rustc cargo ];
+        };
+      }
+    );
 }
