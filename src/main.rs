@@ -25,7 +25,7 @@ async fn main() {
         num_matches += u32::try_from(games.len()).unwrap();
 
         // Check if user suppresses matches output.
-        if app.count_mode {
+        if app.only_print_count {
             continue;
         }
 
@@ -34,9 +34,9 @@ async fn main() {
         }
     }
 
-    if app.count_mode {
+    if app.only_print_count {
         println!("{num_matches}");
-    } else {
+    } else if !app.do_not_print_count {
         println!(
             "{num_matches} {noun} found.",
             noun = match num_matches {

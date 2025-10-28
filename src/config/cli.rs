@@ -21,6 +21,10 @@ pub fn build() -> Command {
         Print filenames as they appear in the file system, rather than truncate certain elements. Retains file extensions, regional codes (e.g. \"(USA, Europe)\"), disk indicators (e.g. \"(Disk 2)\"), and other codes.\
 ";
 
+    let no_count_long_help = "\
+        Do not print the total number of matches. Incompatible with -c/--count.\
+";
+
     command!()
         .args_conflicts_with_subcommands(true)
         .subcommand(
@@ -84,5 +88,11 @@ pub fn build() -> Command {
                 .action(clap::ArgAction::SetTrue)
                 .help("Print game titles as raw filenames")
                 .long_help(filenames_long_help),
+            Arg::new("no_count")
+                .long("no-count")
+                .conflicts_with("count")
+                .action(clap::ArgAction::SetTrue)
+                .help("Do not print the number of matches")
+                .long_help(no_count_long_help),
         ])
 }

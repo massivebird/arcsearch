@@ -15,7 +15,9 @@ pub struct App {
     /// Print game titles as their plain filenames.
     pub titles_as_filenames: bool,
     /// Only print number of matching games.
-    pub count_mode: bool,
+    pub only_print_count: bool,
+    /// Do not print the number of matches.
+    pub do_not_print_count: bool,
 }
 
 impl App {
@@ -91,7 +93,8 @@ impl App {
             archive_root,
             query,
             titles_as_filenames: matches.get_flag("filenames"),
-            count_mode: matches.get_flag("count"),
+            only_print_count: matches.get_flag("count"),
+            do_not_print_count: matches.get_flag("no_count"),
         }
     }
 }
