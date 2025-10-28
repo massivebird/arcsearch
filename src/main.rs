@@ -1,5 +1,5 @@
-use self::config::Config;
-use arcconfig::{config_file::ConfigFile, system::System};
+use self::config::App;
+use arcconfig::system::System;
 use regex::Regex;
 use std::{collections::VecDeque, fs::DirEntry, path::Path, result::Result};
 use tokio::spawn;
@@ -8,37 +8,24 @@ mod config;
 
 #[tokio::main]
 async fn main() {
-    let config = Config::generate();
-
-    let systems: Vec<System> = ConfigFile::from_archive(&config.archive_root)
-        .unwrap()
-        .systems()
-        .unwrap()
-        .into_iter()
-        .filter(|s| {
-            config
-                .desired_systems
-                .as_ref()
-                .is_none_or(|labels| labels.contains(&s.label))
-        })
-        .collect();
+    let app = App::build();
 
     let mut handles = VecDeque::new();
 
-    for system in systems.clone() {
-        let config = config.clone();
+    for system in app.systems.clone() {
+        let config = app.clone();
         handles.push_back(spawn(async move { query_system(&config, system) }));
     }
 
     let mut num_matches: u32 = 0;
 
-    for system in systems {
+    for system in app.systems {
         let games = handles.pop_front().unwrap().await.unwrap();
 
         num_matches += u32::try_from(games.len()).unwrap();
 
         // Check if user suppresses matches output.
-        if config.only_print_count {
+        if app.only_print_count {
             continue;
         }
 
@@ -47,9 +34,9 @@ async fn main() {
         }
     }
 
-    if config.only_print_count {
+    if app.only_print_count {
         println!("{num_matches}");
-    } else {
+    } else if !app.do_not_print_count {
         println!(
             "{num_matches} {noun} found.",
             noun = match num_matches {
@@ -60,7 +47,7 @@ async fn main() {
     }
 }
 
-fn query_system(config: &Config, system: System) -> Vec<String> {
+fn query_system(config: &App, system: System) -> Vec<String> {
     let mut games: Vec<String> = Vec::new();
 
     let system_path = config.archive_root.join(system.directory);

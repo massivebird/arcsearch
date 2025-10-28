@@ -1,21 +1,29 @@
+use arcconfig::{config_file::ConfigFile, system::System};
 use regex::Regex;
 use std::{env, path::PathBuf};
 
 mod cli;
 
 #[derive(Clone)]
-pub struct Config {
-    pub archive_root: PathBuf,
+pub struct App {
     pub query: Regex,
-    pub desired_systems: Option<Vec<String>>,
+    pub archive_root: PathBuf,
+
+    /// Systems as specified by configuration file.
+    pub systems: Vec<System>,
+
+    /// Print game titles as their plain filenames.
     pub titles_as_filenames: bool,
+    /// Only print number of matching games.
     pub only_print_count: bool,
+    /// Do not print the number of matches.
+    pub do_not_print_count: bool,
 }
 
-impl Config {
+impl App {
     /// Generates configuration options based on command line arguments.
-    pub fn generate() -> Self {
-        let cli = cli::build_cli();
+    pub fn build() -> Self {
+        let cli = cli::build();
 
         let matches = cli.get_matches();
 
@@ -25,13 +33,14 @@ impl Config {
                 .get_one::<clap_complete_command::Shell>("shell")
                 .unwrap();
 
-            let mut cli = cli::build_cli();
+            let mut cli = cli::build();
 
             shell.generate(&mut cli, &mut std::io::stdout());
 
             std::process::exit(0);
         }
 
+        // Shortcut for retrieving a command line argument.
         let get_arg = |arg_name: &str| -> Option<&String> { matches.get_one::<String>(arg_name) };
 
         let archive_root: PathBuf = {
@@ -61,15 +70,31 @@ impl Config {
             Regex::new(&format!("{opts}{raw_query}")).expect("Invalid regex query")
         };
 
-        let desired_systems: Option<Vec<String>> = get_arg("desired_systems")
-            .map(|labels| labels.split(',').map(ToString::to_string).collect());
+        let systems: Vec<System> = {
+            // If the user specified some system labels, only query these systems.
+            let desired_systems: Option<Vec<String>> = get_arg("desired_systems")
+                .map(|labels| labels.split(',').map(ToString::to_string).collect());
+
+            ConfigFile::from_archive(&archive_root)
+                .unwrap()
+                .systems()
+                .unwrap()
+                .into_iter()
+                .filter(|s| {
+                    desired_systems
+                        .as_ref()
+                        .is_none_or(|labels| labels.contains(&s.label))
+                })
+                .collect()
+        };
 
         Self {
+            systems,
             archive_root,
             query,
-            desired_systems,
             titles_as_filenames: matches.get_flag("filenames"),
             only_print_count: matches.get_flag("count"),
+            do_not_print_count: matches.get_flag("no_count"),
         }
     }
 }
