@@ -1,6 +1,6 @@
 # arcsearch has been archived!
 
-I'm archiving arcsearch in favor of the new and improved [bsrc](https://github.com/massivebird). Please check it out!
+I'm archiving arcsearch in favor of the new and improved [bsrc](https://github.com/massivebird/bsrc). Please check it out!
 
 Arcsearch is awesome, and bsrc will grow on the foundation of everything that arcsearch did right. I want this version of arcsearch to remain as a reminder of how far I've come as a developer.
 
